@@ -7,15 +7,15 @@ WSGI handler.
 As of version 1.1.0, you MUST use the `init_app()` function
 to properly use `autoinject` with Flask contexts. Previously,
 the informant was registered automatically. Calling `init_app()` 
-also registers a `teardown_appcontext()` callback which removes the 
-application context.
+now (as of 2.0.0) uses the new contextvars integration in `autoinject`
+by wrapping the call to wsgi_app() in an `autoinject.with_contextvars()`
+decorator. This ensures that injected functions are cleaned up when the call
+to wsgi_app() ends and prevents any ordering problems in terms of the 
+teardown functions.
 
-Note that Flask calls functions registered via `teardown_appcontext()` 
-from last to first. The call to `flask_autoinject.init_app()` should 
-therefore go BEFORE any function which might also register an
-appcontext teardown that relies on an injected variable. Since
-request teardowns happen before appcontext teardowns, it is also safe
-to use injected objects in request teardown functions.
+Note that this module does not provide management of autoinjected variables
+outside of the context of a call to wsgi_app() (essentially from app config push to 
+teardown). Any other management you will need to provide yourself.
 
 ```python
 import flask
