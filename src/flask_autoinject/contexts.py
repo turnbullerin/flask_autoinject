@@ -9,4 +9,7 @@ class AutoInjectMiddleware:
 
     @injector.with_contextvars()
     def wsgi_app(self, *args, **kwargs):
-        self._app_call(*args, **kwargs)
+        return self._app_call(*args, **kwargs)
+
+    def __call__(self, *args, **kwargs):
+        return self.wsgi_app(*args, **kwargs)

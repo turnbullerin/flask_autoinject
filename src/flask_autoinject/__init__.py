@@ -6,4 +6,4 @@ def init_app(app: flask.Flask):
     """Initialize the Flask context handling."""
     app.wsgi_app = AutoInjectMiddleware(app.wsgi_app)
 
-__version__ = "2.0.0"
+__version__ = "2.0.1"
